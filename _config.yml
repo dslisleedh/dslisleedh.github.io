@@ -1,6 +1,6 @@
 title: "같이 성장하는 블로그"
 author: "Dongheon Lee(dslisleedh)"
-description: "AI, Data"
+description: "공부한 것을 정리 및 공유하는 공간 \n관심분야 : AI, 데이터, 컴퓨터비전"
 permalink: /:title/
 lang: "kor"
 excerpt_separator: "\n\n\n"
