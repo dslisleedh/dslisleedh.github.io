@@ -130,7 +130,10 @@ mathjax: true
 
  구글의 연구자들은 굳이 computational cost가 엄청 비싼 multi-head self attention을 사용해서 spatial information을 처리해야 하는가에 대해 의문을 던지며 새로운 모델 구조를 제안했으니, 그 모델이 바로 MLP-Mixer, MLP-based model의 시초입니다.
 
-2편에서 계속 ...
+
+
+
+<b>2편에서 계속 ...</b>
 
 
 <b id="f1">[1]:</b> https://www.pikpng.com/pngvi/himiwJb_mlp-network-architecture-for-mnist-multilayer-perceptron-clipart/ [↩](#a1)  
