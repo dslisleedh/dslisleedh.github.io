@@ -60,7 +60,7 @@ mathjax: true
 
 ## Transformer
 
- CNN을 적극적으로 사용한 컴퓨터 비전 분야와 다르게, sequential data를 처리해야 했던 자연어 처리 분야에서는 RNN류 모델을 주로 사용했었습니다. 하지만 RNN은 학습이 불안정하며 먼 시점의 데이터를 처리하기 힘들다는 단점이 있었기에 이를 개선한 transformer가 등장합니다.
+ 잠시 주제를 바꿔 자연어 처리 분야로 넘어가 보죠. CNN을 적극적으로 사용한 컴퓨터 비전 분야와 다르게, sequential data를 처리해야 했던 자연어 처리 분야에서는 RNN류 모델을 주로 사용했었습니다. 하지만 RNN은 학습이 불안정하며 먼 시점의 데이터를 처리하기 힘들다는 단점이 있었기에 이를 개선한 transformer에게 자리를 내줍니다.
 
 <center>
 <img src="/assets/transformer.png">  
@@ -70,7 +70,7 @@ mathjax: true
 <em>Fig. 5 Transformer architecture</em>
 </center>
 
- Transformer의 특징은 “여러 시점의 데이터를 한번에 처리한다" 로 요약할 수 있습니다. 순차적으로 하나씩 시점을 처리해야 했던 RNN에 비해 더 빠른 속도로 연산할 수 있는 것이죠. 그러면서도 각 시점간의 연관성을 모델이 처리할 수 있게 multi-head self attention을 활용 했습니다. Multi-head self attention은 각 시점간의 연결성을 모델이 파악할 수 있도록 feature map에서 Query, Key, Value를 추출한 후 Query와 Key를 사용해 각 시점의 연관성을 나타내는 attention map을 만들어, 이를 다시 Value에 곱해 다른 시점의 정보를 효율적으로 처리해줍니다. 또한 multi-head라는 접두사가 붙은 것에서 알 수 있듯이, 각각의 Query, Key, Value를 N개의 head로 분리 한 후 앞에서 설명한 self attention 연산을 하여, 같은 연산량에서도 좀 더 다양한 정보를 추출할 수 있도록 했습니다.
+ Transformer의 특징은 “여러 시점의 데이터를 한번에 처리한다" 로 요약할 수 있습니다. 순차적으로 하나씩 시점을 처리해야 했던 RNN에 비해 더 안정적이며 빠른 속도로 연산할 수 있는 것이죠. 그러면서도 각 시점간의 연관성을 모델이 처리할 수 있게 multi-head self attention을 활용 했습니다. Multi-head self attention은 각 시점간의 연관성을 모델이 파악할 수 있도록 feature map에서 Query, Key, Value를 추출한 후 Query와 Key를 사용해 각 시점의 연관성을 나타내는 attention map을 만든 뒤, 이를 다시 Value에 곱해 다른 시점의 정보를 효율적으로 처리합니다. 또한 multi-head라는 접두사가 붙은 것에서 알 수 있듯이, 각각의 Query, Key, Value를 N개의 head로 분리 한 후 앞에서 설명한 self attention 연산을 하여, 같은 연산량에서도 좀 더 다양한 정보를 추출할 수 있도록 했습니다.
 
  본 포스트는 transformer를 위한 포스트가 아니기에 여기에선 컨셉만 간단히 설명했지만, 중요한 개념이기에 jalammar같이 잘 설명된 블로그를 꼭 한번 보시는 것을 추천드립니다.
 
