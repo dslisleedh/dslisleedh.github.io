@@ -4,9 +4,9 @@ layout: post
 mathjax: true
 ---
 
- MLP-based model은 CNN model, Transformer-based vision model을 뒤이어 최근 컴퓨터 비전 커뮤니티에서 중점적으로 연구되는 구조입니다.   
+ MLP-based model은 CNN model, Transformer-based vision model을 뒤이어 최근 컴퓨터 비전 커뮤니티에서 중요하게 연구되는 구조입니다.   
 
- 이번 포스트에서는 MLP-based model들에 대해 설명하기 보다는 컴퓨터 비전 분야에서 주류 모델들이 어떻게 발전해왔고, 왜 CNN-based model, Tranformer-based vision model 등 먼 길을 돌아 MLP-based model이 다시 주류가 되었는지를 설명하고자 합니다.   
+ 이번 포스트에서는 MLP-based model에 대해 설명하기 보다는 컴퓨터 비전 분야에서 주류 모델들이 어떻게 발전해왔고, 왜 CNN-based model, Tranformer-based vision model 등 먼 길을 돌아 MLP-based model이 다시 주류가 되었는지를 설명하고자 합니다.   
 
 
 
@@ -138,4 +138,4 @@ mathjax: true
 
 <b id="f1">[1]:</b> https://www.pikpng.com/pngvi/himiwJb_mlp-network-architecture-for-mnist-multilayer-perceptron-clipart/ [↩](#a1)  
 <b id="f1">[2]:</b> https://samiraabnar.github.io/articles/2020-05/indist [↩](#a2)  
-<b id="f1">[2]:</b> https://www.researchgate.net/figure/An-example-of-CNN-architecture_fig1_320748406 [↩](#a3)  
+<b id="f1">[3]:</b> https://www.researchgate.net/figure/An-example-of-CNN-architecture_fig1_320748406 [↩](#a3)  
