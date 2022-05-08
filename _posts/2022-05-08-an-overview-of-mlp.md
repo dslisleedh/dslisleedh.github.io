@@ -30,7 +30,7 @@ mathjax: true
 <em>Fig. 2 Translation Invariance</em> <sup id="a2">[2]</sup>
 </center>
 
- Translation invariance는 특정한 패턴이 다른 위치에 등장하더라도 이것이 같은 패턴임을 모델이 인지할수 있음을 의미합니다. 하지만 MLP는 공간에 대한 정보를 모델에서 감지할 수 없기에 이런 능력을 갖지 못했으며, [이미지2]처럼 특정 패턴이 이미지 내에서 움직임에 따라 hidden layer의 activation 값들이 크게 요동침을 볼 수 있습니다. 이에 연구자들은 “패턴"을 탐지할 수 있는 모델 구조를 찾게 되었고, CNN이 등장하며 컴퓨터 분야의 발전을 이끌게 됩니다.
+ Translation invariance는 특정한 패턴이 다른 위치에 등장하더라도 이것이 같은 패턴임을 모델이 인지할수 있음을 의미합니다. 하지만 MLP는 공간에 대한 정보를 모델에서 감지할 수 없기에 이 능력을 갖지 못했으며, [Fig. 2]처럼 특정 패턴이 이미지 내에서 움직임에 따라 모델의 logits가 크게 요동침을 볼 수 있습니다. 이에 연구자들은 “공간 내의 패턴"을 탐지 할 수 있는 모델인 CNN이 등장하며 컴퓨터 분야의 발전을 이끌게 됩니다.
 
 ## Convolutional Neural Network
 
@@ -42,9 +42,9 @@ mathjax: true
 <em>Fig. 3 CNN architecture</em> <sup id="a3">[3]</sup>
 </center>
 
- CNN은 이미지에 특정 범위내의 패턴을 탐지하는 필터를 씌워서 정보를 얻어내는데 당연히 짐작할 수 있듯이 더 큰 필터를 씌우는 것이 더 넓은 범위의 패턴을 감지할 수 있기에 더 좋은 성능을 보장합니다. 하지만 필터의 크기가 커질 때 마다 파라미터 숫자와 계산량이 지수적으로 증가하기에, 당시의 컴퓨팅 파워로는 무작정 필터 크기를 키우는 것에는 한계가 있었죠. 
+ CNN은 이미지에 특정 범위내의 패턴을 탐지하는 필터를 씌워서 정보를 얻습니다. 당연히 짐작할 수 있듯이 더 큰 필터를 씌우는 것이 더 넓은 범위의 패턴을 감지할 수 있기에 더 좋은 성능을 보장하지만 필터의 크기가 커질 때 마다 파라미터 숫자와 계산량이 지수적으로 증가하기에 무작정 필터 크기를 키우는 것에는 한계가 있었죠. 
 
- 재미있는 점은 convolution layer를 연속해서 사용하는 것은 곧 필터의 크기를 키우는 것과 같은 효과를 내지만, 파라미터 수는 오히려 적다는 것입니다. 즉 3 x 3 크기의 필터를 가진 convolution layer를 2번 거치는 것은 더 적은 연산량으로 5 x 5필터 사이즈를 가진 convolution layer 1개를 거치는 것과 같은 범위를 볼 수 있다는 것이죠. 이에 초창기 CNN에 대한 연구는 필터의 사이즈를 적당하게 조절하면서 가능한 한 레이어를 많이 쌓는 것에 있었습니다. Weight initialization이나 intermediate normalization과 같은 연구가 이뤄짐에 따라 쌓아갈 수 있는 레이어의 개수는 점차 증가하게 되었고, 마침내 ResNet이 등장함으로써 매우 깊은 신경망을 구현할 수 있게 되어 진정한 “딥러닝"이라 부를 수 있는 시대가 도래하게 됩니다.
+ 재미있는 점은 convolution layer를 연속해서 사용하는 것은 곧 필터의 크기를 키우는 것과 같은 효과를 내지만, 파라미터 수는 오히려 적다는 것입니다. 즉 3 x 3 크기의 필터를 가진 convolution layer를 2번 거치는 것은 더 적은 연산량으로 5 x 5필터 사이즈를 가진 convolution layer 1개를 거치는 것과 같은 범위를 볼 수 있다는 것이며, 당연히 MLP에서 여러 층을 쌓는 것 처럼 더 복잡한 함수를 mapping하는 의미도 있습니다. 이에 초창기 CNN에 대한 연구는 필터의 사이즈를 적당하게 조절하면서 안정적으로 많은 레이어를 쌓는 것에 집중 했죠. Weight initialization이나 intermediate normalization에 대한 연구가 이뤄짐에 따라 쌓아갈 수 있는 레이어의 개수는 점차 증가하게 되었고, 마침내 ResNet이 등장함으로써 매우 깊은 신경망을 구현할 수 있게 되어 진정한 “딥러닝"이라 부를 수 있는 시대가 도래하게 됩니다.
 
 <center>
 <img src="/assets/resnetmodel.jpg">  
@@ -54,7 +54,7 @@ mathjax: true
 <em>Fig. 4 ResNet(36-layers)의 구조</em>
 </center>
 
- 레이어들이 계속해서 곱해지는것이 아닌, 계속 더해지게 만든다는 ResNet의 컨셉은 간단하지만 매우 효과적이었습니다. 152층이란 깊이를 안정적으로 학습해낸 ResNet에 이어, identity mapping과 pre-activation을 사용해 성능 저하없이 1000층을 안정적으로 학습해낸 ResNet의 개선작까지 등장하게 되면서 이제 신경망 깊이의 제한은 사실상 사라진 것이나 다름 없게 됐습니다. 
+ 레이어들이 계속해서 곱해지는것이 아닌, 계속 더해지게 만든다는 ResNet의 컨셉은 간단하지만 매우 효과적이었습니다. 152층이란 깊이를 안정적으로 학습해낸 ResNet에 이어, identity mapping과 pre-activation을 사용해 성능 저하없이 1000층을 안정적으로 학습해낸 ResNet의 개선작까지 등장하게 되면서 이제 신경망 깊이의 제한은 사실상 사라진 것이나 다름 없었습니다.
 
  깊이의 제한이 사라졌다는 것은 곧 모델에서 사용할 수 있는 자원의 현실적인 제한이 사라졌다는 것과 다름없었기에,  같은 자원에서 더 효율적으로 정보를 추출할 수 있는 구조를 찾게 되었습니다. Dense block, SE block, depth-wise/point-wise convolution, separable convolution 및 EfficientNet의 자원 분배의 수식화 등을 예로 들 수 있습니다.
 
@@ -104,17 +104,17 @@ mathjax: true
 <em>Fig. 7 Inductive bias </em> <sup>[2]</sup>
 </center>
 
- 하지만 transformer를 컴퓨터 비전에 적용하는데 어려움이 따랐으니, 바로 약한 inductive bias 입니다. Inductive bias는 데이터가 아닌 모델 자체에서 발생하는 bias를 의미합니다. 예를 들어 image restoration에서 주로 사용하는 방식인 loss term의 변화로 모델이 semantic information에 집중하게 만든다던지, edge information에 집중하게 만드는 등의 방법을 생각하면 이해하기 쉽습니다. 물론 위의 경우는 모델의 loss에서 inductive bias가 발생하지만, CNN 같은 경우는 필터 내에서 보이는 정보는 인접한 픽셀에 위치한다는 모델 구조 자체에서 기인하는 inductive bias가 발생하죠. 이러한 inductive bias는 머신러닝의 가장 기초에서 배우는 bias-variance trade-off와 비슷하게 동작합니다. 적당한 inductive bias는 데이터셋의 variance가 크더라도 잘 수렴할 수 있게 해주지만, 너무 큰 inductive bias는 일반화 하기 힘든 결과를 보이겠죠. 
+ 하지만 transformer의 약한 inductive bias 때문에 CNN보다 항상 좋은 결과를 보이진 않았습니다. Inductive bias는 데이터가 아닌 모델 자체에서 발생하는 bias를 의미합니다. 예를 들어 image restoration에서 주로 사용하는 방식인 loss term의 변화로 모델이 semantic information에 집중하게 만든다던지, edge information에 집중하게 만드는 등의 방법을 생각하면 이해하기 쉽습니다. 물론 위의 경우는 모델의 loss에서 inductive bias가 발생하지만, CNN 같은 경우는 필터 내에서 보이는 정보는 인접한 픽셀에 위치한다는 모델 구조 자체에서 기인하는 inductive bias가 발생하죠. 이러한 inductive bias는 머신러닝의 가장 기초에서 배우는 bias-variance trade-off와 비슷하게 동작합니다. 적당한 inductive bias는 데이터셋의 variance가 크더라도 잘 수렴할 수 있게 해주지만, 너무 큰 inductive bias는 일반화 하기 힘든 결과를 보이겠죠. 
 
 <center>
 <img src="/assets/transformervscnnperformance.jpg">  
 </center>
 
 <center>
-<em>Fig. 8 Performance evalutation </em>
+<em>Fig. 8 Performance evaluation </em>
 </center>
 
- Inductive bias는 vision transformer가 CNN에 비해 더 많은 데이터셋을 필요로 하는 이유를 설명해줍니다. 학습에 필요한 데이터 셋이 적을 때는 CNN의 inductive bias 가 더 높은 성능을 보장해주지만, 학습에 사용되는 데이터 셋이 많아질수록 vision transformer의 global receptive field가 CNN의 inductive bias를 이기게 되는 것이죠. 마침 구글에서 vision transformer의 약한 inductive bias가 문제되지 않을 엄청난 규모의 데이터셋인 JFT-300M을 가지고 있었기에 vision transformer의 진정한 성능을 끌어낼 수 있었습니다.
+ Inductive bias는 [Fig. 8]에서 보이는 것 처럼 vision transformer가 더 많은 데이터셋을 사용 할 수록 CNN보다 성능이 좋아지는 이유를 설명해줍니다. 학습에 필요한 데이터 셋이 적을 때는 CNN의 inductive bias 가 더 높은 성능을 보장해주지만, 학습에 사용되는 데이터 셋이 많아질수록 vision transformer의 global receptive field가 CNN의 inductive bias를 이기게 되는 것이죠. 마침 구글에서 vision transformer의 약한 inductive bias가 문제되지 않을 엄청난 규모의 데이터셋인 JFT-300M을 가지고 있었기에 vision transformer의 진정한 성능을 끌어낼 수 있었습니다.
 
 ## MLP-based Model
 
