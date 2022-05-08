@@ -27,7 +27,7 @@ mathjax: true
 </center>
 
 <center>
-<em>Fig. 2 Translation Invariance</em> <sup id="a2">[1]</sup>
+<em>Fig. 2 Translation Invariance</em> <sup id="a2">[2]</sup>
 </center>
 
  Translation invariance는 특정한 패턴이 다른 위치에 등장하더라도 이것이 같은 패턴임을 모델이 인지할수 있음을 의미합니다. 하지만 MLP는 공간에 대한 정보를 모델에서 감지할 수 없기에 이런 능력을 갖지 못했으며, [이미지2]처럼 특정 패턴이 이미지 내에서 움직임에 따라 hidden layer의 activation 값들이 크게 요동침을 볼 수 있습니다. 이에 연구자들은 “패턴"을 탐지할 수 있는 모델 구조를 찾게 되었고, CNN이 등장하며 컴퓨터 분야의 발전을 이끌게 됩니다.
@@ -58,7 +58,7 @@ mathjax: true
 
  깊이의 제한이 사라졌다는 것은 곧 모델에서 사용할 수 있는 자원의 현실적인 제한이 사라졌다는 것과 다름없었기에,  같은 자원에서 더 효율적으로 정보를 추출할 수 있는 구조를 찾게 되었습니다. Dense block, SE block, depth-wise/point-wise convolution, separable convolution 및 EfficientNet의 자원 분배의 수식화 등을 예로 들 수 있습니다.
 
-## Transformer-based model
+## Transformer
 
  CNN을 적극적으로 사용한 컴퓨터 비전 분야와 다르게, sequential data를 처리해야 했던 자연어 처리 분야에서는 RNN류 모델을 주로 사용했었습니다. 하지만 RNN은 학습이 불안정하며 먼 시점의 데이터를 처리하기 힘들다는 단점이 있었기에 이를 개선한 transformer가 등장합니다.
 
@@ -94,7 +94,7 @@ mathjax: true
 <em>Fig. 7 Limit of CNN </em>
 </center>
 
- 앞서 말했듯이 CNN은 이미지에서 나타나는 특정 패턴을 탐지함이 목적이었습니다. 그럼 여기서 더 나아가 [이미지 7]의 예제처럼 패턴간의 상대적인 위치도 파악해서 좌/우가 다른 이미지임을 알 수가 있을까요? 알 수 있습니다. 하지만 RNN에서 먼 시점의 데이터를 처리하기 위해 모델의 capacity를 늘렸던 것 처럼, 필터의 사이즈가 충분히 커질 때 까지 모델의 capacity를 늘려야 가능합니다. RNN에서 보였던 문제를 CNN에서도 보이고 있다 할 수 있죠. 이에 기존 transformer에서 한번에 긴 시점을 처리 했던 것 처럼, vision transformer에서는 각각의 이미지 조각(image patch)들을 시점처럼 활용하여 모든 이미지를 한번에 처리하고자 합니다.
+ 앞서 말했듯이 CNN은 이미지에서 나타나는 특정 패턴을 탐지함이 목적이었습니다. 그럼 여기서 더 나아가 [Fig. 7]의 예제처럼 패턴간의 상대적인 위치도 파악해서 좌/우가 다른 이미지임을 알 수가 있을까요? 알 수 있습니다. 하지만 RNN에서 먼 시점의 데이터를 처리하기 위해 모델의 capacity를 늘렸던 것 처럼, 필터의 사이즈가 충분히 커질 때 까지 모델의 capacity를 늘려야 가능합니다. RNN에서 보였던 문제를 CNN에서도 보이고 있다 할 수 있죠. 이에 기존 transformer에서 한번에 긴 시점을 처리 했던 것 처럼, vision transformer에서는 각각의 이미지 조각(image patch)들을 시점처럼 활용하여 모든 이미지를 한번에 처리하고자 합니다.
 
 <center>
 <img src="/assets/inductivebias_example.png">  
@@ -116,9 +116,9 @@ mathjax: true
 
  Inductive bias는 vision transformer가 CNN에 비해 더 많은 데이터셋을 필요로 하는 이유를 설명해줍니다. 학습에 필요한 데이터 셋이 적을 때는 CNN의 inductive bias 가 더 높은 성능을 보장해주지만, 학습에 사용되는 데이터 셋이 많아질수록 vision transformer의 global receptive field가 CNN의 inductive bias를 이기게 되는 것이죠. 마침 구글에서 vision transformer의 약한 inductive bias가 문제되지 않을 엄청난 규모의 데이터셋인 JFT-300M을 가지고 있었기에 vision transformer의 진정한 성능을 끌어낼 수 있었습니다.
 
-## MLP-based Models
+## MLP-based Model
 
- 잠시 스크롤을 올려 [Fig.6]를 다시 보고 올까요? Vision transformer의 블록은 크게 두 phase로 나뉩니다. 첫 번째 phase는 multi-head self attention을 활용해 이미지의 spatial information을 처리하며, 두 번째 phase는 MLP(1x1 convolution)을 활용하여 channel information를 처리합니다. 이후의 vision transformer variants의 블록을 봐도 spatial information과 channel information을 나눠서 처리하며, 각각의 spatial/channel 정보를 처리하는 방식만 바꾸는 것을 볼 수 있습니다. 
+ 잠시 스크롤을 올려 [Fig. 6]를 다시 보고 올까요? Vision transformer의 블록은 크게 두 phase로 나뉩니다. 첫 번째 phase는 multi-head self attention을 활용해 이미지의 spatial information을 처리하며, 두 번째 phase는 MLP(1x1 convolution)을 활용하여 channel information를 처리합니다. 이후의 vision transformer variants의 블록을 봐도 spatial information과 channel information을 나눠서 처리하며, 각각의 spatial/channel 정보를 처리하는 방식만 바꾸는 것을 볼 수 있습니다. 
 
 <center>
 <img src="/assets/mlpmixer.jpg">  
