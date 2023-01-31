@@ -5,7 +5,9 @@ mathjax: true
 ---
 
  이번 포스트는 딥러닝 모델을 최적화 하기 위한 Optimizer에 대해 SGD부터 Adabelief까지 발전 과정, 그리고 수식 및 구현에 대해 알아볼 것이며, 
-실제로 Optimizer가 최적화를 진행하는 과정을 시각화 하여 이해하기 쉽게 작성할 것입니다. 
+실제로 Optimizer가 최적화를 진행하는 과정을 시각화 하여 이해하기 쉽게 작성할 것입니다.
+
+## 문제 정의
 
 <center>
 <img src="/assets/Saddle.png">
@@ -54,7 +56,8 @@ Learning rate를 0.001로 설정하고, x, y 좌표를 각각 -미분값만큼 �
 
 $$ w_t = w_{t-1} - \alpha dw $$  
 
-여기서 w는 x, y 좌표를 의미하고, t는 반복 횟수를 의미합니다. 즉 T번 반복하면서 w를 업데이트 하는 것이죠.  
+여기서 w는 x, y 좌표를 의미하고, t는 반복 횟수를 의미하며, dw는 gradient를 의미합니다. 
+즉 T번 반복하면서 w를 -alpha * gradient로 업데이트 하는 것이죠.  
 
 이제 위의 수식을 코드로 구현해보겠습니다. 
 
@@ -121,11 +124,11 @@ Momentum SGD는 이 원리를 적용한 것입니다.
 
 Momentum SGD를 수식으로 표현하면 다음과 같습니다.
 
-$$ v_{t+1} = \beta v_t + \alpha dw $$
-$$ x_{t+1} = x_t - v_{t+1} $$
+$$ v_t = \beta v_{t-1} - \alpha dw $$  
+$$ w_t = w_{t-1} + v_t $$
 
-여기서 v는 velocity, 현재의 관성을 의미하며, $\beta$는 momentum을 의미합니다. beta가 클수록 이전 시점을 더 많이 고려하게 됩니다. 
-사실 EMA에서는 과거시점에는 $\beta$를, 현 시점에는 $(1-\beta)$를 곱해주나, Momentum SGD에서는 과거 시점에만 $\beta$를 곱해주는 것을 볼 수 있습니다.
+여기서 v는 velocity로 t 시점의 관성을 의미하며, $$\beta$$는 이전 관성의 영향력 의미합니다. $$\beta$$가 클수록 이전 시점을 더 많이 고려하게 됩니다. 
+사실 EMA에서는 과거시점에 $$\beta$$를, 현 시점에는 $$(1-\beta)$$를 곱해주나, Momentum SGD에서는 과거 시점에만 $$\beta$$를 곱해주는 것을 볼 수 있습니다.
 
 위의 수식을 사용해 Momentum SGD를 구현하면 다음과 같습니다.  
 
@@ -145,16 +148,102 @@ class MomentumSGD(Optimizer):
         return self.velocity
 ```
 
-이번에도 update 함수를 오버라이딩 하며 update rule만 수정했습니다. 
-
 실제로 Momentum SGD를 사용해 최적화를 수행한 결과는 다음과 같습니다.
 
 <center>
 <img src="/assets/msgd.gif">
 </center>
 
-일정한 방향으로 최적화 될 때 경사로를 SGD보다 훨씬 더 빨리 타고 내려가는 것이 보입니다.  
+일정한 방향으로 최적화 될 때 경사로를 SGD보다 훨씬 더 빨리 타고 내려가는 것이 보입니다. 엄청난 발전이네요.  
+하지만 관성 때문에 오히려 반대편 경사로를 살짝 타고 올라갔다가 다시 내려오는 것 또한 보입니다. 즉 관성 때문에 일정 지점에서는 Overshooting을 하는 경향을 보입니다. 
+그럼 이런 문제를 어떻게 해결할 수 있을까요?  
 
-## Nesterov Momentum SGD 
+## Nesterov Momentum SGD(Nesterov Accelerated Gradient descent; NAG)
+
+NAG는 위에서 말한 Overshooting 문제를 "생각을 하고 도박을 하는 것 보다 도박을 하고 생각하는 것이 일반적으로 더 좋다" 라는 아이디어로 해결합니다.  
+
+<center>
+<img src="/assets/nag_concept.jpg">
+</center>
+
+NAG는 이전 시점의 관성으로 먼저 이동한 뒤(도박을 한 뒤), 해당 시점에서 gradient를 계산하여 이동합니다. Momentum SGD(좌)와 NAG(우)의 도달점 화살표가 살짝 차이나는걸 볼 수 있죠. 
+왜 이런 방식이 Overshooting을 해결할 수 있을까요?
+
+<center>
+<img src="/assets/nag.png">
+</center>
+
+위 예시에서 Momentum SGD(위)에 비해 NAG(아래)가 Overshooting에서 더 빨리 회복 하는 것을 볼 수 있습니다.
+Momentum SGD는 최저점에 거의 도달했을 때, 관성 + gradient로 업데이트를 하기에 바로 최저점을 매우 크게 지나쳐버리지만, 
+NAG는 관성으로 먼저 반대방향으로 이동한 뒤 반대방향에서 최저점으로 가는 gradient를 계산하기에 Overshooting을 줄이게 되는 것이죠.
+
+NAG를 수식으로 표현하면 다음과 같습니다.  
+
+$$ v_t = \beta v_{t-1} - \alpha d(w - v_{t-1}) $$  
+$$ w_t = w_{t-1} + v_t $$
+
+$$ d(w - v_{t-1}) $$는 관성으로 이동한 뒤의 gradient를 의미합니다.  
+
+위의 수식을 코드로 구현하면 다음과 같습니다.  
+
+
+```python
+class NesterovMomentumSGD(Optimizer):
+    def __init__(self, learning_rate: float = 1e-3, momentum: float = 0.9):
+        super().__init__()
+        self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.velocity = 0.
+
+    def update(self, grads: Optional[jnp.ndarray] = None):
+        lr = return_lr(self.learning_rate, self.step)
+        super().update()
+
+        self.velocity = self.momentum * self.velocity - lr * grads
+        return self.momentum * self.velocity - (lr * grads)
+```
+
+수식과 코드를 정확히 보신 분들은 느꼈겠지만, 뭔가 이상하지 않나요? velocity로 이동한 뒤 미분을 계산하지도 않고,
+update rule이 위 수식과 조금 다르죠. 위 구현체는 Keras에서 구현한 것과 같기에 틀린 구현도 아닌데, 왜 수식과 다를까요?  
+
+### NAG 수식과 Keras 구현의 차이
+
+ 사실 Keras의 구현이 NAG 수식과 "다른"것은 아닙니다. 위 코드의 마지막 줄을 수식으로 풀어쓴다면 
+ 
+$$ w_t = w_{t-1} + \beta v_t - \alpha dw $$  
+가 됩니다. 이를 조금 변형해보면  
+
+$$
+\begin{linenomath*}
+\begin{align}
+w_t &= w_{t-1} + \beta v_t - \alpha dw \\
+    &= w_{t-1} + \beta v_t - \alpha dw + \beta v_{t-1} - \beta v_{t-1} \\ 
+    &= w_{t-1} - \beta v_{t-1} + \beta v_{t-1} - \alpha dw + \beta v_t \\
+    &= w_{t-1} - \beta v_{t-1} + (\beta v_{t-1} - \alpha dw) + \beta v_t 
+\end{align}
+\end{linenomath*}
+$$  
+가 됩니다. 다시 정리해보죠. 1번에서는 단순히 $$v_t$$를 치환했고, 2번에서는 $$ \beta v_{t-1} - \beta v_{t-1} = 0 $$을 이용했고,
+3번은 단순히 순서를 바꾼 것이며, 4번은 보기 쉽게 괄호를 친게 끝입니다. 
+
+<center>
+<img src="/assets/nagkeras.png">
+</center>  
+
+자 그럼 위 사진을 보면, 기존 NAG의 경우, 0번에서 1번으로 점프를 한 뒤 1번에서 2번으로 미분을 계산하여 이동하게 됩니다.  
+하지만 Keras의 NAG 경우는 1번에서 시작해서 미분을 계산($$\alpha dw$$)합니다. 그럼 위 수식의 6번에서 
+$$ - \beta v_{t-1} $$는 1번에서 0번으로 Momentum인 갈색 화살표를 빼는 것이며, $$ + (\beta v_{t-1} - \alpha dw) $$ 는 0에서 2로 가는 과정을 합친 녹색 화살표죠. 
+마지막으로 $$ \beta v_t $$는 2에서 3, 즉 다음 미분 계산을 위해 현재의 momentum을 미리 더해 놓는 것입니다. NAG는 0->1->2 순으로 이동하나,
+Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 더한 것이란 의미죠. 이 때문에 Weight에 veloicty를 더하는 추가적인 작업을 하지 않고도 NAG와 거의 같은 결과를 얻을 수 있습니다.  
+
+
+실제로 NAG로 최적화를 수행한 결과는 다음과 같습니다.  
+
+<center>
+<img src="/assets/nag.gif">
+</center>  
+
+
+## AdaGrad(Adaptive Gradient)
 
 작성중
