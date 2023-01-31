@@ -1,4 +1,3 @@
-<!doctype html>
 ---
 title: "Optimizer 기초부터 알아보기"
 layout: post
@@ -243,7 +242,3 @@ Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 
 우리가 의도한대로, NAG가 조금더 빨리 Overshooting에서 회복하는것이 보입니다. 
 
 ## AdaGrad(Adaptive Gradient)
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"></script>
