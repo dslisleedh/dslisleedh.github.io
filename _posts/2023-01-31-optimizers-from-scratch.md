@@ -181,7 +181,7 @@ NAG를 수식으로 표현하면 다음과 같습니다.
 $$ v_t = \beta v_{t-1} - \alpha d(w - v_{t-1}) $$  
 $$ w_t = w_{t-1} + v_t $$
 
-$$ d(w - v_{t-1}) $$는 관성으로 이동한 뒤의 gradient를 의미합니다.  
+$ d(w - v_{t-1}) $는 관성으로 이동한 뒤의 gradient를 의미합니다.  
 
 위의 수식을 코드로 구현하면 다음과 같습니다.  
 
@@ -219,7 +219,7 @@ w_t &= w_{t-1} + \beta v_t - \alpha dw \\
     &= w_{t-1} - \beta v_{t-1} + (\beta v_{t-1} - \alpha dw) + \beta v_t 
 \end{align} \end{linenomath*} $$  
 
-가 됩니다. 정리하면 2번에서는 $$ \beta v_{t-1} - \beta v_{t-1} = 0 $$을 이용했고, 
+가 됩니다. 정리하면 2번에서는 $ \beta v_{t-1} - \beta v_{t-1} = 0 $을 이용했고, 
 3번은 단순히 순서를 바꾼 것이며, 4번은 보기 쉽게 괄호를 친게 끝입니다. 
 
 <center>
@@ -227,9 +227,9 @@ w_t &= w_{t-1} + \beta v_t - \alpha dw \\
 </center>  
 
 자 그럼 위 사진을 보면, 기존 NAG의 경우, 0번에서 1번으로 점프를 한 뒤 1번에서 2번으로 gradient를 계산하여 이동하게 됩니다.  
-하지만 Keras의 NAG 경우는 1번에서 시작해서 gradient를 계산($$\alpha dw$$)합니다. 그럼 위 수식의 6번에서 
-$$ - \beta v_{t-1} $$는 1번에서 0번으로 Momentum인 갈색 화살표를 빼는 것이며, $$ + (\beta v_{t-1} - \alpha dw) $$ 는 0에서 2로 가는 과정을 합친 녹색 화살표죠. 
-마지막으로 $$ \beta v_t $$는 2에서 3, 즉 다음 gradient 계산을 위해 현재의 momentum을 미리 더해 놓는 것입니다. NAG는 0->1->2 순으로 이동하나,
+하지만 Keras의 NAG 경우는 1번에서 시작해서 gradient를 계산($\alpha dw$)합니다. 그럼 위 수식의 6번에서 
+$ - \beta v_{t-1} $는 1번에서 0번으로 Momentum인 갈색 화살표를 빼는 것이며, $ + (\beta v_{t-1} - \alpha dw) $ 는 0에서 2로 가는 과정을 합친 녹색 화살표죠. 
+마지막으로 $ \beta v_t $는 2에서 3, 즉 다음 gradient 계산을 위해 현재의 momentum을 미리 더해 놓는 것입니다. NAG는 0->1->2 순으로 이동하나,
 Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 더한 것이란 의미죠. 이 때문에 Weight에 veloicty를 더하는 추가적인 작업을 하지 않고도 NAG와 거의 같은 결과를 얻을 수 있습니다.  
 
 
@@ -239,6 +239,7 @@ Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 
 <img src="/assets/nag.gif">
 </center>  
 
+우리가 의도한대로, NAG가 조금더 빨리 Overshooting에서 회복하는것이 보입니다. 
 
 ## AdaGrad(Adaptive Gradient)
 
