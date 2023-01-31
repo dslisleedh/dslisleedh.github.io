@@ -1,3 +1,4 @@
+<!doctype html>
 ---
 title: "Optimizer 기초부터 알아보기"
 layout: post
@@ -36,8 +37,7 @@ $$ f(x, y) = x^2 - y^2 $$
 그럼 실제로 위의 예제에서 Gradient Descent를 적용해보겠습니다.
 우리가 최소화 하고싶은 x, y 좌표에 대한 공의 함수를 미분하면 다음과 같습니다. 
 
-$$ \frac{\partial f}{\partial x} = 2x $$
-$$ \frac{\partial f}{\partial y} = -2y $$
+ $$\frac{\partial f}{\partial x} = 2x, \frac{\partial f}{\partial y} = -2y$$  
 
 우리의 시작점은 x=2, y=0.001이며, gradient는 x=4, y=-0.002가 되겠죠.  
 그럼 이제 x, y 좌표를 각각 -gradient만큼 이동시킨다면 x는 -4만큼, y는 0.002만큼 이동하게 됩니다. 
@@ -121,7 +121,7 @@ Momentum SGD는 이 원리를 적용한 것입니다.
 하지만 Momentum SGD는 관성때문에 이전 움직임을 어느정도 따라가려 하기에, 턱을 넘어서 Global minima로 수렴할 수 있겠죠. 
 당연히 현 시점의 gradient에 noise가 있는 상황에서도 이전 움직임을 어느정도유지하려 하기 때문에 더 robust한 특성도 보일 수 있습니다.  
 
-Momentum SGD를 수식으로 표현하면 다음과 같습니다.
+Momentum SGD를 수식으로 표현하면 다음과 같습니다.  
 
 $$ v_t = \beta v_{t-1} - \alpha dw $$  
 $$ w_t = w_{t-1} + v_t $$  
@@ -154,7 +154,7 @@ class MomentumSGD(Optimizer):
 </center>
 
 일정한 방향으로 최적화 될 때 경사로를 SGD보다 훨씬 더 빨리 타고 내려가는 것이 보입니다. 엄청난 발전이네요.  
-하지만 관성 때문에 오히려 반대편 경사로를 살짝 타고 올라갔다가 다시 내려오는 것 또한 보입니다. 즉 관성 때문에 일정 지점에서는 Overshooting을 하는 경향을 보입니다. 
+하지만 관성 때문에 오히려 반대편 경사로를 살짝 타고 올라갔다가 다시 내려오는 것 또한 보입니다. 즉 관성 때문에 일정 지점에서는 Overshooting이 발생할 수 있습니다. 
 그럼 이런 문제를 어떻게 해결할 수 있을까요?  
 
 ## Nesterov Momentum SGD(Nesterov Accelerated Gradient descent; NAG)
@@ -178,11 +178,10 @@ NAG는 관성으로 먼저 반대방향으로 이동한 뒤 반대방향에서 �
 
 NAG를 수식으로 표현하면 다음과 같습니다.  
 
-$$ v_t = \beta v_{t-1} - \alpha d(w - v_{t-1}) $$  
-
+$$ v_t = \beta v_{t-1} - \alpha d(w - v_{t-1}) $$
 $$ w_t = w_{t-1} + v_t $$  
 
-$d(w - v_{t-1})$ 는 관성으로 이동한 뒤의 gradient를 의미합니다.  
+ $d(w - v_{t-1})$ 는 관성으로 이동한 뒤의 gradient를 의미합니다.  
 
 위의 수식을 코드로 구현하면 다음과 같습니다.  
 
@@ -244,3 +243,7 @@ Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 
 우리가 의도한대로, NAG가 조금더 빨리 Overshooting에서 회복하는것이 보입니다. 
 
 ## AdaGrad(Adaptive Gradient)
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"></script>
