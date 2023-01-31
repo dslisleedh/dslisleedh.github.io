@@ -213,12 +213,12 @@ $$ w_t = w_{t-1} + \beta v_t - \alpha dw $$
 
 가 됩니다. 이를 조금 변형해보면  
 
-$$ \begin{linenomath*} \begin{align} 
+$$ \begin{align} 
 w_t &= w_{t-1} + \beta v_t - \alpha dw \\ 
     &= w_{t-1} + \beta v_t - \alpha dw + \beta v_{t-1} - \beta v_{t-1} \\ 
     &= w_{t-1} - \beta v_{t-1} + \beta v_{t-1} - \alpha dw + \beta v_t \\ 
     &= w_{t-1} - \beta v_{t-1} + (\beta v_{t-1} - \alpha dw) + \beta v_t 
-\end{align} \end{linenomath*} $$  
+\end{align} $$  
 
 가 됩니다. 정리하면 2번에서는 $ \beta v_{t-1} - \beta v_{t-1} = 0 $을 이용했고, 
 3번은 단순히 순서를 바꾼 것이며, 4번은 보기 쉽게 괄호를 친게 끝입니다. 
@@ -247,3 +247,4 @@ Keras의 NAG는 1->0->2 순서로 이동한 뒤 다음 시점을 위해 2->3을 
 작성중
 
 \( \alpha \)
+$\alpha$
