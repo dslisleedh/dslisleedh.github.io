@@ -9,7 +9,7 @@ mathjax: true
 
 <center>
 <img src="/assets/Saddle.png">
-</center>>
+</center>
 
 우선 Optimizer로 해결하고 싶은 문제상황은 위 사진과 같습니다. x(2.), y(0.001)에 위치한 공의 좌표를 움직이면서 해당 좌표에 위치한 공의 높이를 최소화 하고 싶은 상황입니다.  
 해당 좌표에 대한 공의 높이 함수는 다음과 같습니다.
@@ -52,7 +52,7 @@ Learning rate를 0.001로 설정하고, x, y 좌표를 각각 -미분값만큼 �
 
 위에서 말로 설명한 것을 수식으로 표현하면 다음과 같습니다.  
 
-$$ w_t = w_{t-1} - \alpha \frac{\partial f}{\partial w} $$  
+$$ w_t = w_{t-1} - \alpha dw $$  
 
 여기서 w는 x, y 좌표를 의미하고, t는 반복 횟수를 의미합니다. 즉 T번 반복하면서 w를 업데이트 하는 것이죠.  
 
@@ -108,19 +108,20 @@ SGD의 Update rule은 우리가 위에서 봤던 수식과 같습니다.
 
 ## Momentum SGD
 
-Momentum SGD는 SGD에 momentum을 추가한 것입니다. 생각해보면 실제로 언덕에서 공을 굴린다면 공이 일정한 방향으로 계속 굴러갈 때 더 빠르게 굴러가는 것을 볼 수 있습니다. 이 때문에 한 방향으로 계속 Gradient descent가 이뤄진다면, SGD보다 더 빨리 수렴할 수 있습니다.  
-또한 Momentum SGD는 SGD보다 더 안정적으로 수렴합니다.  
+Momentum SGD는 SGD에 momentum을 추가한 것입니다. 생각해보면 실제로 언덕에서 공을 굴린다면 공이 일정한 방향으로 계속 굴러갈 때 관성 때문에 더 빠르게 굴러가는 것을 볼 수 있습니다. 
+Momentum SGD는 이 원리를 적용한 것입니다. 
 
 <center>
 <img src="/assets/momentum.png">
 </center>
 
-위 예시를 보면 Gradient descent는 현 시점의 기울기만을 보기 때문에, 작은 턱에 걸려서 Global minima로 수렴하지 못합니다. 하지만 Momentum SGD는 현 시점의 기울기와 이전 시점의 기울기를 고려하기 때문에, 턱을 넘어서 Global minima로 수렴할 수 있겠죠. 
-당연히 noise가 있는 상황에서도 이전 움직임을 어느정도유지하려 하기 때문에 더 robust한 특성도 보이죠.  
+위 예시를 보면 Gradient descent는 현 시점의 기울기만을 보기 때문에, 작은 턱에 걸려서 Global minima로 수렴하지 못합니다. 
+하지만 Momentum SGD는 관성때문에 이전 움직임을 어느정도 따라가려 하기에, 턱을 넘어서 Global minima로 수렴할 수 있겠죠. 
+당연히 현 시점의 gradient에 noise가 있는 상황에서도 이전 움직임을 어느정도유지하려 하기 때문에 더 robust한 특성도 보일 수 있습니다.  
 
 Momentum SGD를 수식으로 표현하면 다음과 같습니다.
 
-$$ v_{t+1} = \beta v_t + \alpha \frac{\partial f}{\partial w} $$
+$$ v_{t+1} = \beta v_t + \alpha dw $$
 $$ x_{t+1} = x_t - v_{t+1} $$
 
 여기서 v는 velocity, 현재의 관성을 의미하며, $\beta$는 momentum을 의미합니다. beta가 클수록 이전 시점을 더 많이 고려하게 됩니다. 
@@ -152,7 +153,7 @@ class MomentumSGD(Optimizer):
 <img src="/assets/msgd.gif">
 </center>
 
-경사로를 SGD보다 훨씬 더 빨리 타고 내려가는 것이 보입니다.  
+일정한 방향으로 최적화 될 때 경사로를 SGD보다 훨씬 더 빨리 타고 내려가는 것이 보입니다.  
 
 ## Nesterov Momentum SGD 
 
